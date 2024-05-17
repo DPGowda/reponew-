@@ -1,6 +1,7 @@
 package com.comcat.crm.orgtest;
 
 import org.openqa.selenium.By;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.comcast.crm.objectrepositoryutility.POM.HomePage;
@@ -10,10 +11,9 @@ import com.comcast.crm.objectrepositoryutility.POM.Organizationspage;
 import com.comcast.crm.objectrepositoryutility.POM.Orginfopage;
 import com.crm.comcast.BaseClass.BaseClass;
 
-public class CreateOrganizationtest extends BaseClass {
+public class CreateOrganizationTest extends BaseClass {
 
-	@Test(groups = "smoke testing")
-
+	@Test (groups="regression testing")
 	public void createOrganizationtest() throws Throwable {
 
 		HomePage hp = new HomePage(driver);
@@ -22,7 +22,7 @@ public class CreateOrganizationtest extends BaseClass {
 
 		Organizationspage org = new Organizationspage(driver);
 		org.getOrgbutton().click();
-
+		
 //				  driver.findElement(By.xpath("//a[@href='index.php?module=Accounts&action=index']")).click();
 
 		String orgname = ex.getDataFromExcel("Sheet1", 1, 2) + jU.getRandomNumber();
@@ -38,20 +38,23 @@ public class CreateOrganizationtest extends BaseClass {
 		OrganizationInfoPage info = new OrganizationInfoPage(driver);
 		Thread.sleep(5000);
 		String text = info.getHeaddermsg().getText();
-		if (text.contains(orgname)) {
+		Assert.assertEquals(true, text.contains(orgname));
+		/*if (text.contains(orgname)) {
 			System.out.println(orgname + "is contains==pass");
 		} else {
 			System.out.println(orgname + "is not contains==fail");
-		}
+		}*/
 
 		// verify header msg expected result
 
 		String actualorgname = info.getActorgname().getText();
-		if (actualorgname.equals(orgname)) {
+		
+		Assert.assertEquals(true, actualorgname.contains(orgname));
+		/*if (actualorgname.equals(orgname)) {
 			System.out.println(orgname + "is contains==pass");
 		} else {
 			System.out.println(orgname + "is not contains==fail");
-		}
+		}*/
 
 		hp.getOrglink().click();
 		org.getSearchbox().sendKeys(orgname);
@@ -68,7 +71,7 @@ public class CreateOrganizationtest extends BaseClass {
 
 	}
 
-	@Test
+	@Test (groups="regression testing")
 
 	public void createorganizationWithINdustest() throws Throwable {
 
@@ -106,7 +109,7 @@ public class CreateOrganizationtest extends BaseClass {
 //			}
 	}
 
-	@Test
+	@Test (groups="smoke testing")
 
 	public void createOrgWithPhoneNumtest() throws Throwable {
 		HomePage home = new HomePage(driver);

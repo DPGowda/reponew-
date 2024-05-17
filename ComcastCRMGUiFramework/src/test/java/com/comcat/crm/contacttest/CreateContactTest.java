@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
 import com.aventstack.extentreports.Status;
 import com.comcast.crm.objectrepositoryutility.POM.ContactInformationPage;
 import com.comcast.crm.objectrepositoryutility.POM.Contactspage;
@@ -16,38 +18,38 @@ import com.comcast.crm.objectrepositoryutility.POM.Organizationspage;
 import com.comcat.crm.generic.webdriverutility.UtilityClassObject;
 import com.crm.comcast.BaseClass.BaseClass;
 
-//@Listeners(com.crm.comcast.ListenerUtility.ListImpClass.class)
+@Listeners(com.crm.comcast.ListenerUtility.ListImpClass.class)
 public class CreateContactTest extends BaseClass {
-
-	@Test /* (groups = "smoke testing") */
+	
+	@Test (groups="smoke testing")
 	public void createContactTest() throws Throwable {
 
-//		UtilityClassObject.getTest().log(Status.INFO, "navigate to home page");
+		UtilityClassObject.getTest().log(Status.INFO, "navigate to home page");
 //			Step 2: navigate  to contact module 			
 		HomePage hp = new HomePage(driver);
 		hp.getContlink().click();
 
-//		UtilityClassObject.getTest().log(Status.INFO, "navigate to contact page");
+		UtilityClassObject.getTest().log(Status.INFO, "navigate to contact page");
 //			Step 3: click on "create organization" button
 		Contactspage conpage = new Contactspage(driver);
 		conpage.getCreatecont().click();
 
-//		UtilityClassObject.getTest().log(Status.INFO, "read data from excel");
+		UtilityClassObject.getTest().log(Status.INFO, "read data from excel");
 //			Step 4: enter all the details and create new organization
 		String lastname = ex.getDataFromExcel("Sheet2", 1, 1) + jU.getRandomNumber();
 
-//		UtilityClassObject.getTest().log(Status.INFO, "creation of contact");
+		UtilityClassObject.getTest().log(Status.INFO, "creation of contact");
 		CreateContactPage ccp = new CreateContactPage(driver);
 		ccp.getLastName().sendKeys(lastname);
 		ccp.getSaveButton().click();
 
-//		UtilityClassObject.getTest().log(Status.INFO, " verify headder phone number info expected result");
+		UtilityClassObject.getTest().log(Status.INFO, " verify headder phone number info expected result");
 //			Step 5: verify headder phone number info expected result
 		ContactInformationPage cont = new ContactInformationPage(driver);
 		String actlastname = cont.getActheradder().getText();
 		boolean status = actlastname.contains(lastname);
 		/*SoftAssert asrt=new SoftAssert();*/
-		Assert.assertEquals(status, true);
+		Assert.assertEquals(true,actlastname.contains(lastname));
 		/*if (actlastname.contains(lastname)) {
 			System.out.println(lastname + " is avaliable");
 		} else {
@@ -57,8 +59,9 @@ public class CreateContactTest extends BaseClass {
 
 	}
 
-	@Test
+	@Test (groups="regression testing")
 	public void CreateContactWithOrgTest() throws Throwable {
+		
 		UtilityClassObject.getTest().log(Status.INFO, "navigate to home page");
 		HomePage hompg = new HomePage(driver);
 		hompg.getOrglink().click();
@@ -78,12 +81,13 @@ public class CreateContactTest extends BaseClass {
 		Thread.sleep(5000);
 		OrganizationInformationPage orginfo = new OrganizationInformationPage(driver);
 		String actorgname = orginfo.getActorgname().getText();
-
-		if (actorgname.contains(orgname)) {
+		
+		Assert.assertEquals(true, actorgname.contains(orgname));
+		/*if (actorgname.contains(orgname)) {
 			System.out.println(orgname + "is contains==pass");
 		} else {
 			System.out.println(orgname + "is not contains==fail");
-		}
+		}*/
 
 		UtilityClassObject.getTest().log(Status.INFO, "navigate to home page");
 		hompg.getContlink().click();
@@ -101,7 +105,6 @@ public class CreateContactTest extends BaseClass {
 		Organizations_childbrowserPage orgchild = new Organizations_childbrowserPage(driver);
 		orgchild.getSearch_txt().sendKeys(orgname);
 		orgchild.getSearch().click();
-		Thread.sleep(5000);
 		driver.findElement(By.xpath("//a[text()='" + orgname + "']")).click();
 
 		wuti.switchToTabOnURL(driver, "Contacts&action");
@@ -111,23 +114,29 @@ public class CreateContactTest extends BaseClass {
 
 		ContactInformationPage coninfo = new ContactInformationPage(driver);
 		String actheadder = coninfo.getActheradder().getText();
+		
+		Assert.assertEquals(true, actheadder.contains(conlastname));
 
-		if (actheadder.contains(conlastname)) {
+		/*if (actheadder.contains(conlastname)) {
 			System.out.println(conlastname + "is contains==pass");
 		} else {
 			System.out.println(conlastname + "is not contains==fail");
-		}
+		}*/
 
 		String actorgname1 = coninfo.getActorgname().getText();
+		
+		SoftAssert soft=new SoftAssert();
+		soft.assertEquals(true, actorgname1.contains(orgname));
+		soft.assertAll();
 
-		if (actorgname1.contains(orgname)) {
+		/*if (actorgname1.contains(orgname)) {
 			System.out.println(orgname + "is contains==pass");
 		} else {
 			System.out.println(orgname + "is not contains==fail");
-		}
+		}*/
 	}
 
-	@Test
+	@Test (groups="regression testing")
 	public void CreateContactWithSupportDateTest() throws Throwable {
 
 		Contactspage cont = new Contactspage(driver);
@@ -148,27 +157,29 @@ public class CreateContactTest extends BaseClass {
 		crepage.getEndDate().sendKeys(Enddate);
 		crepage.getSaveButton().click();
 
-//	
-		Thread.sleep(2000);
 
-//verify header msg expected result 
-//	 wlib.switchToAlertAndAccept(driver);
+//		verify header msg expected result 
+//		 wlib.switchToAlertAndAccept(driver);
 
 		String actstartdate = crepage.getActstartdate().getText();
+		
+		Assert.assertEquals(true, actstartdate.contains(Startdate));
 
-		if (actstartdate.contains(Startdate)) {
+		/*if (actstartdate.contains(Startdate)) {
 			System.out.println(Startdate + "is contains==pass");
 		} else {
 			System.out.println(Startdate + "is not contains==fail");
-		}
+		}*/
 
 //verify header msg expected result 
+		
 		String actuallenddate = crepage.getActenddate().getText();
+		Assert.assertEquals(true, actuallenddate.contains(Enddate));
 
-		if (actuallenddate.equals(Enddate)) {
+		/*if (actuallenddate.equals(Enddate)) {
 			System.out.println(Enddate + "is verified==pass");
 		} else {
 			System.out.println(Enddate + "is not verified==fail");
-		}
+		}*/
 	}
 }

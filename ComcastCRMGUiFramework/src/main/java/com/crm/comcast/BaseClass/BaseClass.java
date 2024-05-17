@@ -31,19 +31,20 @@ public class BaseClass {
 	public ExtentSparkReporter REPORT;
 	public WebDriverUtility wuti = new WebDriverUtility();
 
-	@BeforeSuite /* (groups = {"smoke testing","regression testing"}) */
+	@BeforeSuite (groups = {"smoke testing","regression testing"}) 
 	public void configBS() {
 		dblib.getDbconnection();
 		System.out.println("====conn to DB==========");
 	}
 
 //	@Parameters ("BROWSER")
-	@BeforeClass /* (groups = {"smoke testing","regression testing"}) */
+	@BeforeClass (groups = {"smoke testing","regression testing"}) 
 	public void configBC(/* String browser */) throws Throwable {
 
 //		String BROWSER = c;
-		String browser = file.getDataFromPropertiesFile("browser");
-
+//		String browser = file.getDataFromPropertiesFile("browser");
+		
+		String browser = System.getProperty("browser",file.getDataFromPropertiesFile("browser"));
 		if (browser.equals("chrome")) {
 			driver = new ChromeDriver();
 		} else if (browser.equals("firefox")) {
@@ -56,12 +57,16 @@ public class BaseClass {
 		System.out.println("========exicute BC=========");
 	}
 
-	@BeforeMethod /* (groups = {"smoke testing","regression testing"}) */
+	@BeforeMethod (groups = {"smoke testing","regression testing"}) 
 	public void connBM() throws Throwable {
 		
-		String url = file.getDataFromPropertiesFile("url");
+		/*String url = file.getDataFromPropertiesFile("url");
 		String username = file.getDataFromPropertiesFile("username");
-		String password = file.getDataFromPropertiesFile("password");
+		String password = file.getDataFromPropertiesFile("password");*/
+		
+		String url = System.getProperty("url",file.getDataFromPropertiesFile("url"));
+		String username = System.getProperty("username",file.getDataFromPropertiesFile("username"));
+		String password = System.getProperty("password",file.getDataFromPropertiesFile("password"));
 		
 		LoginPage lp = new LoginPage(driver);
 		lp.loginToapp(url, username, password);
@@ -69,7 +74,7 @@ public class BaseClass {
 		System.out.println("====exicute BM==========");
 	}
 
-	@AfterMethod /* (groups = {"smoke testing","regression testing"}) */
+	@AfterMethod  (groups = {"smoke testing","regression testing"}) 
 	public void configAM() {
 		
 		HomePage hp = new HomePage(driver);
@@ -79,14 +84,14 @@ public class BaseClass {
 		System.out.println("========exicute AM=========");
 	}
 
-	@AfterClass /* (groups = {"smoke testing","regression testing"}) */
+	@AfterClass  (groups = {"smoke testing","regression testing"}) 
 	public void connAC() {
 		driver.quit();
 		
 		System.out.println("====exicute AC==========");
 	}
 
-	@AfterSuite /* (groups = {"smoke testing","regression testing"}) */
+	@AfterSuite  (groups = {"smoke testing","regression testing"}) 
 	public void configAS() throws Throwable {
 		dblib.closeConnection();
 		

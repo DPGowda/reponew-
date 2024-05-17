@@ -5,7 +5,7 @@
     <classes>
       <class name="com.comcat.crm.contacttest.CreateContactTest">
         <methods>
-			<include name ="createContactTest"/>
+			<include name ="CreateContactWithSupportDateTest"/>
 		</methods>
 	  </class>		
       <class name="com.comcat.crm.orgtest.CreateOrganizationtest">
